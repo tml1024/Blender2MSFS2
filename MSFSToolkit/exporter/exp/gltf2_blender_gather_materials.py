@@ -14,18 +14,18 @@
 
 import bpy
 
-from io_scene_gltf2.blender.exp.gltf2_blender_gather_cache import cached
-from io_scene_gltf2.io.com import gltf2_io
-from io_scene_gltf2.io.com.gltf2_io_extensions import Extension
-from io_scene_gltf2.blender.exp import gltf2_blender_gather_texture_info, gltf2_blender_export_keys
-from io_scene_gltf2.blender.exp import gltf2_blender_gather_material_normal_texture_info_class
-from io_scene_gltf2.blender.exp import gltf2_blender_gather_material_occlusion_texture_info_class
-from io_scene_gltf2.blender.exp import gltf2_blender_search_node_tree
+from .gltf2_blender_gather_cache import cached
+from ..com import gltf2_io
+from ..com.gltf2_io_extensions import Extension
+from . import gltf2_blender_gather_texture_info, gltf2_blender_export_keys
+from . import gltf2_blender_gather_material_normal_texture_info_class
+from . import gltf2_blender_gather_material_occlusion_texture_info_class
+from . import gltf2_blender_search_node_tree
 
-from io_scene_gltf2.blender.exp import gltf2_blender_gather_materials_pbr_metallic_roughness
-from io_scene_gltf2.blender.com.gltf2_blender_extras import generate_extras
-from io_scene_gltf2.blender.exp import gltf2_blender_get
-from io_scene_gltf2.io.exp.gltf2_io_user_extensions import export_user_extensions
+from . import gltf2_blender_gather_materials_pbr_metallic_roughness
+from ..com.gltf2_blender_extras import generate_extras
+from . import gltf2_blender_get
+from .gltf2_io_user_extensions import export_user_extensions
 
 
 @cached

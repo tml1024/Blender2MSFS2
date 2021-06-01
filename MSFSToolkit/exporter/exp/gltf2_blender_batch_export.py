@@ -26,10 +26,10 @@ import bpy
 import time
 import re
 import os
-from io_scene_gltf2.io.com.gltf2_io_debug import print_console, print_newline
+from ..com.gltf2_io_debug import print_console, print_newline
 from .gltf2_blender_gltf2_exporter import GlTF2Exporter
-from io_scene_gltf2.io.exp import gltf2_io_draco_compression_extension
-from io_scene_gltf2.io.exp.gltf2_io_user_extensions import export_user_extensions
+from . import gltf2_io_draco_compression_extension
+from .gltf2_io_user_extensions import export_user_extensions
 
 def save_ext_gltf(context, export_settings):
     """Go through the collections and find the lods, export them one by one."""

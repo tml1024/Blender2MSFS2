@@ -21,7 +21,7 @@ bl_info = {
     "author" : "Otmar Nitsche",
     "description" : "This toolkit prepares your 3D assets to be used for Microsoft Flight Simulator. Copyright (c) 2020 Otmar Nitsche",
     "blender" : (2, 82, 3),
-    "version" : (0, 37, 0),
+    "version" : (0, 40, 0),
     "location" : "View3D",
     "warning" : "This version of the addon is work-in-progress. Don't use it in your active development cycle, as it adds variables and objects to the scene that may cause issues further down the line.",
     "category" : "3D View",
@@ -56,7 +56,8 @@ def register():
     from .exporter import register
     register()
 
-    bpy.types.Scene.msfs_guid = bpy.props.StringProperty(name="GUID",default="")
+    #removed by request of scenery designers.
+    #bpy.types.Scene.msfs_guid = bpy.props.StringProperty(name="GUID",default="")
 
 def register_panel():
     from .extensions import register_panel

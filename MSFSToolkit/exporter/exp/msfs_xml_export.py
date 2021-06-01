@@ -69,24 +69,24 @@ def save_xml(context, export_settings, lods=[]):
 
         root = etree.fromstring(xml_string.lstrip())
 
+        msfs_guid = ""
+
         #check the ModelInfo
         ModelInfo_node = root.find('ModelInfo')
         if ModelInfo_node == None:
             ModelInfo_node = etree.SubElement(root, "ModelInfo")
             ModelInfo_node.set('version', "1.1")
             if export_settings['gltf_msfs_generate_guid'] == True:
-                if context.scene.msfs_guid == "":
-                    context.scene.msfs_guid = generate_guid()
-                ModelInfo_node.set('guid',context.scene.msfs_guid)
+                msfs_guid = generate_guid()
+                ModelInfo_node.set('guid',msfs_guid)
         else:
             if export_settings['gltf_msfs_generate_guid'] == True:
-                if context.scene.msfs_guid == "":
-                    if ('guid' in ModelInfo_node.attrib and 'guid' in ModelInfo_node.attrib != ""):
-                        context.scene.msfs_guid = ModelInfo_node.attrib['guid']
-                    else:
-                        context.scene.msfs_guid = generate_guid()
+                if ('guid' in ModelInfo_node.attrib and 'guid' in ModelInfo_node.attrib != ""):
+                    msfs_guid = ModelInfo_node.attrib['guid']
+                else:
+                    msfs_guid = generate_guid()
 
-                ModelInfo_node.set('guid',context.scene.msfs_guid)
+                ModelInfo_node.set('guid',msfs_guid)
         
         if len(lods) > 0:
             LODS_node = ModelInfo_node.find('LODS')
@@ -123,9 +123,8 @@ def save_xml(context, export_settings, lods=[]):
         ModelInfo_node = etree.SubElement(root, "ModelInfo")
         ModelInfo_node.set('version', "1.1")
         if export_settings['gltf_msfs_generate_guid'] == True:
-            if context.scene.msfs_guid == "":
-                context.scene.msfs_guid = generate_guid()
-            ModelInfo_node.set('guid',context.scene.msfs_guid)
+            msfs_guid = generate_guid()
+            ModelInfo_node.set('guid',msfs_guid)
         if len(lods) > 0:
             lod_size = []
             current_size = 0

@@ -15,17 +15,17 @@
 import bpy
 import typing
 
-from io_scene_gltf2.blender.com.gltf2_blender_data_path import get_target_object_path, get_target_property_name, get_rotation_modes
-from io_scene_gltf2.io.com import gltf2_io
-from io_scene_gltf2.io.com import gltf2_io_debug
-from io_scene_gltf2.blender.exp.gltf2_blender_gather_cache import cached
-from io_scene_gltf2.blender.exp import gltf2_blender_gather_animation_samplers
+from ..com.gltf2_blender_data_path import get_target_object_path, get_target_property_name, get_rotation_modes
+from ..com import gltf2_io
+from ..com import gltf2_io_debug
+from .gltf2_blender_gather_cache import cached
+from . import gltf2_blender_gather_animation_samplers
 from . import gltf2_blender_gather_animation_channel_target
-from io_scene_gltf2.blender.exp import gltf2_blender_gather_animation_sampler_keyframes
-from io_scene_gltf2.blender.exp import gltf2_blender_get
-from io_scene_gltf2.blender.exp import gltf2_blender_gather_skins
-from io_scene_gltf2.blender.exp import gltf2_blender_gather_drivers
-from io_scene_gltf2.io.exp.gltf2_io_user_extensions import export_user_extensions
+from . import gltf2_blender_gather_animation_sampler_keyframes
+from . import gltf2_blender_get
+from . import gltf2_blender_gather_skins
+from . import gltf2_blender_gather_drivers
+from .gltf2_io_user_extensions import export_user_extensions
 
 
 @cached

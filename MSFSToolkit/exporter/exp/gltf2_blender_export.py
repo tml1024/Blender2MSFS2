@@ -28,15 +28,15 @@ import bpy
 import sys
 import traceback
 
-from io_scene_gltf2.blender.com import gltf2_blender_json
-from io_scene_gltf2.blender.exp import gltf2_blender_export_keys
+from ..com import gltf2_blender_json
+from . import gltf2_blender_export_keys
 from . import gltf2_blender_gather
 #from io_scene_gltf2.blender.exp import gltf2_blender_gather
 from .gltf2_blender_gltf2_exporter import GlTF2Exporter #replacing the original exporter here.
-from io_scene_gltf2.io.com.gltf2_io_debug import print_console, print_newline
-from io_scene_gltf2.io.exp import gltf2_io_export
-from io_scene_gltf2.io.exp import gltf2_io_draco_compression_extension
-from io_scene_gltf2.io.exp.gltf2_io_user_extensions import export_user_extensions
+from ..com.gltf2_io_debug import print_console, print_newline
+from . import gltf2_io_export
+from . import gltf2_io_draco_compression_extension
+from .gltf2_io_user_extensions import export_user_extensions
 
 
 def save_ext_gltf(context, export_settings):

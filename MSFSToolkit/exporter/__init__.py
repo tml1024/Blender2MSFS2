@@ -87,7 +87,7 @@ class ExportExtendedGLTF2_Base:
     # TODO: refactor to avoid boilerplate
 
     def __init__(self):
-        from io_scene_gltf2.io.exp import gltf2_io_draco_compression_extension
+        from .exp import gltf2_io_draco_compression_extension
         self.is_draco_available = gltf2_io_draco_compression_extension.dll_exists()
 
     bl_options = {'PRESET'}
@@ -729,7 +729,7 @@ class GLTF_PT_export_geometry_compression_ext_gltf(bpy.types.Panel):
     bl_options = {'DEFAULT_CLOSED'}
 
     def __init__(self):
-        from io_scene_gltf2.io.exp import gltf2_io_draco_compression_extension
+        from .exp import gltf2_io_draco_compression_extension
         self.is_draco_available = gltf2_io_draco_compression_extension.dll_exists(quiet=True)
 
     @classmethod

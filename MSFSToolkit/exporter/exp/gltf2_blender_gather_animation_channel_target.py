@@ -15,12 +15,12 @@
 
 import bpy
 import typing
-from io_scene_gltf2.io.com import gltf2_io
-from io_scene_gltf2.blender.exp.gltf2_blender_gather_cache import cached
+from ..com import gltf2_io
+from .gltf2_blender_gather_cache import cached
 from . import gltf2_blender_gather_nodes
-from io_scene_gltf2.blender.exp import gltf2_blender_gather_joints
-from io_scene_gltf2.blender.exp import gltf2_blender_gather_skins
-from io_scene_gltf2.io.exp.gltf2_io_user_extensions import export_user_extensions
+from . import gltf2_blender_gather_joints
+from . import gltf2_blender_gather_skins
+from .gltf2_io_user_extensions import export_user_extensions
 
 @cached
 def gather_animation_channel_target(channels: typing.Tuple[bpy.types.FCurve],
