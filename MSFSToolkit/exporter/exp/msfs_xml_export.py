@@ -52,12 +52,6 @@ def save_xml(context, export_settings, lods=[]):
 
     root = None
 
-    guid = ""
-    if context.scene.msfs_guid == "":
-        guid = generate_guid()
-    else:
-        guid = context.scene.msfs_guid
-
     if os.path.exists(xml_file):
         with open(xml_file) as f:
             try:
@@ -81,11 +75,18 @@ def save_xml(context, export_settings, lods=[]):
             ModelInfo_node = etree.SubElement(root, "ModelInfo")
             ModelInfo_node.set('version', "1.1")
             if export_settings['gltf_msfs_generate_guid'] == True:
-                ModelInfo_node.set('guid',guid)
+                if context.scene.msfs_guid == "":
+                    context.scene.msfs_guid = generate_guid()
+                ModelInfo_node.set('guid',context.scene.msfs_guid)
         else:
             if export_settings['gltf_msfs_generate_guid'] == True:
-                if (not 'guid' in ModelInfo_node.attrib or 'guid' in ModelInfo_node.attrib == ""):
-                    ModelInfo_node.set('guid',guid)
+                if context.scene.msfs_guid == "":
+                    if ('guid' in ModelInfo_node.attrib and 'guid' in ModelInfo_node.attrib != ""):
+                        context.scene.msfs_guid = ModelInfo_node.attrib['guid']
+                    else:
+                        context.scene.msfs_guid = generate_guid()
+
+                ModelInfo_node.set('guid',context.scene.msfs_guid)
         
         if len(lods) > 0:
             LODS_node = ModelInfo_node.find('LODS')
@@ -122,7 +123,9 @@ def save_xml(context, export_settings, lods=[]):
         ModelInfo_node = etree.SubElement(root, "ModelInfo")
         ModelInfo_node.set('version', "1.1")
         if export_settings['gltf_msfs_generate_guid'] == True:
-            ModelInfo_node.set('guid',guid)
+            if context.scene.msfs_guid == "":
+                context.scene.msfs_guid = generate_guid()
+            ModelInfo_node.set('guid',context.scene.msfs_guid)
         if len(lods) > 0:
             lod_size = []
             current_size = 0

@@ -472,6 +472,8 @@ class MSFS_LI_material():
 
             mat.msfs_show_alpha_cutoff = False
             mat.msfs_show_blend_threshold = True
+
+            switch_msfs_blendmode()
             
             print("Switched to msfs_windshield material.")
 
@@ -1009,14 +1011,14 @@ class MSFS_LI_material():
 
     def switch_msfs_blendmode(self,context):
         mat = context.active_object.active_material
-        if mat.msfs_blend_mode == 'OPAQUE':
-            MakeOpaque(mat)
+        if mat.msfs_material_mode == 'msfs_windshield' or mat.msfs_blend_mode == 'BLEND':
+            MakeTranslucent(mat)
         elif mat.msfs_blend_mode == 'MASKED':
             MakeMasked(mat)
         elif mat.msfs_blend_mode == 'DITHER':
             MakeDither(mat)
         else:
-            MakeTranslucent(mat)
+            MakeOpaque(mat)
 
     #Update functions for the "tint" parameters:
     def update_color_albedo_mix(self, context):
@@ -1072,8 +1074,15 @@ class MSFS_LI_material():
     def update_detail_uv_scale(self,context):
         mat = context.active_object.active_material
         if mat.node_tree.nodes.get("detail_uv_scale", None) != None:
-            mat.node_tree.nodes["detail_uv_scale"].inputs["Strength"].default_value = mat.msfs_detail_uv_scale
+            mat.node_tree.nodes["detail_uv_scale"].inputs["Scale"].default_value[0] = mat.msfs_detail_uv_scale
+            mat.node_tree.nodes["detail_uv_scale"].inputs["Scale"].default_value[1] = mat.msfs_detail_uv_scale
+            mat.node_tree.nodes["detail_uv_scale"].inputs["Scale"].default_value[2] = mat.msfs_detail_uv_scale
 
+    def update_detail_uv_offset(self,context):
+        mat=context.active_object.active_material
+        if mat.node_tree.nodes.get("detail_uv_scale", None) != None:
+            mat.node_tree.nodes["detail_uv_scale"].inputs["Location"].default_value[0] = mat.msfs_detail_uv_offset_x
+            mat.node_tree.nodes["detail_uv_scale"].inputs["Location"].default_value[1] = mat.msfs_detail_uv_offset_y
 
 
     # Main material mode, in accordance with MSFS material shaders:
@@ -1141,7 +1150,7 @@ class MSFS_LI_material():
     # The following variables are written into the glTF file when exporting.
     #Color blends:
     Material.msfs_color_albedo_mix = bpy.props.FloatVectorProperty(name="Albedo Color", subtype='COLOR', min=0.0, max=1.0,size=3,default=[1.0,1.0,1.0], description="The color value set here will be mixed in with the albedo value of the material.",update=update_color_albedo_mix)
-    Material.msfs_color_emissive_mix = bpy.props.FloatVectorProperty(name="Emissive Color", subtype='COLOR', min=0.0, max=1.0,size=3,default=[0.0,0.0,0.0], description="The color value set here will be mixed in with the emissive value of the material.", update=update_color_emissive_mix)
+    Material.msfs_color_emissive_mix = bpy.props.FloatVectorProperty(name="Emissive Color", subtype='COLOR', min=0.0, size=3,default=[0.0,0.0,0.0], description="The color value set here will be mixed in with the emissive value of the material.", update=update_color_emissive_mix)
     Material.msfs_color_alpha_mix = bpy.props.FloatProperty(name="Alpha multiplier", min=0, max=1, default=1, description="The alpha value set here will be mixed in with the Alpha value of the texture.",update=update_color_alpha_mix)
     Material.msfs_color_sss = bpy.props.FloatVectorProperty(name="SSS Color", subtype='COLOR',min=0.0, max=1.0,size=4, default=[1.0,1.0,1.0,1.0], description = "Use the color picker to set the color of the subsurface scattering.",update=update_color_sss)
 
@@ -1223,8 +1232,8 @@ class MSFS_LI_material():
     Material.msfs_normal_scale = bpy.props.FloatProperty(name="Normal scale",min=0,default=1,update=update_normal_scale)
     Material.msfs_alpha_cutoff = bpy.props.FloatProperty(name="Alpha cutoff",min=0,max=1,default=0.1,update=update_alpha_cutoff)
     Material.msfs_detail_uv_scale = bpy.props.FloatProperty(name="Detail UV scale",min=0,default=1,update=update_detail_uv_scale)
-    Material.msfs_detail_uv_offset_x = bpy.props.FloatProperty(name="X",min=-1,max=1,default=0)
-    Material.msfs_detail_uv_offset_y = bpy.props.FloatProperty(name="Y",min=-1,max=1,default=0)
+    Material.msfs_detail_uv_offset_x = bpy.props.FloatProperty(name="X",min=-1,max=1,default=0,update=update_detail_uv_offset)
+    Material.msfs_detail_uv_offset_y = bpy.props.FloatProperty(name="Y",min=-1,max=1,default=0,update=update_detail_uv_offset)
     Material.msfs_detail_normal_scale = bpy.props.FloatProperty(name="Detail normal scale",min=0,max=1,default=1)
     Material.msfs_blend_threshold = bpy.props.FloatProperty(name="Blend threshold",min=0,max=1,default=0.1)
 

@@ -204,7 +204,7 @@ class glTF2ExportUserExtension:
                         if node != None:
                             inputs = (node.inputs["Color2"],)
                         normal_detail_texture = gather_texture_info(inputs, export_settings)
-                        if metallic_detail_texture != None:
+                        if normal_detail_texture != None:
                             detail_extension["detailNormalTexture"] = normal_detail_texture
                     if len(detail_extension) > 0:
                         detail_extension["UVScale"] = blender_material.msfs_detail_uv_scale

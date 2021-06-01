@@ -105,10 +105,13 @@ def __gather_animation(blender_action: bpy.types.Action,
                        blender_object: bpy.types.Object,
                        export_settings
                        ) -> typing.Optional[gltf2_io.Animation]:
+    import re
+
     if not __filter_animation(blender_action, blender_object, export_settings):
         return None
 
     name = __gather_name(blender_action, blender_object, export_settings)
+
     try:
         animation = gltf2_io.Animation(
             channels=__gather_channels(blender_action, blender_object, export_settings),
