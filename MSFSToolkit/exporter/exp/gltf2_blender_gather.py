@@ -17,7 +17,8 @@ import bpy
 from io_scene_gltf2.io.com import gltf2_io
 from io_scene_gltf2.io.com.gltf2_io_debug import print_console
 from . import gltf2_blender_gather_nodes
-from io_scene_gltf2.blender.exp import gltf2_blender_gather_animations
+#from io_scene_gltf2.blender.exp import gltf2_blender_gather_nodes
+from . import gltf2_blender_gather_animations
 from io_scene_gltf2.blender.exp.gltf2_blender_gather_cache import cached
 from io_scene_gltf2.blender.com.gltf2_blender_extras import generate_extras
 from io_scene_gltf2.blender.exp import gltf2_blender_export_keys
@@ -97,8 +98,7 @@ def __gather_animations(blender_scene, export_settings):
 
             # There is only 1 animation in the track
             # If name of the track is not a default name, use this name for action
-            if len(merged_tracks[merged_anim_track]) != 0:
-                animations[merged_tracks[merged_anim_track][0]].name = merged_anim_track
+            animations[merged_tracks[merged_anim_track][0]].name = merged_anim_track
 
             continue
 

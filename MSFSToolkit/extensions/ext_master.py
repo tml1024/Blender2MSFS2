@@ -103,6 +103,7 @@ class glTF2ExportUserExtension:
                 )
                 
 
+
     def gather_material_hook(self, gltf2_material, blender_material, export_settings):
         if (self.properties.enabled == True and blender_material.msfs_material_mode != None):
             if blender_material.msfs_material_mode != 'NONE':
@@ -123,10 +124,15 @@ class glTF2ExportUserExtension:
 
                 if (blender_material.msfs_show_road_material == True or blender_material.msfs_show_collision_material == True):
                     if (blender_material.msfs_road_material == True or blender_material.msfs_collision_material == True):
+                        new_ext = {}
+                        if blender_material.msfs_road_material == True:
+                            new_ext["tags"] = ["Road"]
+                        if blender_material.msfs_collision_material == True:
+                            new_ext["Collision"] = True
+
                         gltf2_material.extensions["ASOBO_tags"] = self.Extension(
                             name="ASOBO_tags",
-                            extension={ "tags": ["Road"],
-                                        "Collision": blender_material.msfs_collision_material},
+                            extension=new_ext,
                             required=False
                         )
 
