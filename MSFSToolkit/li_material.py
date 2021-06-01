@@ -748,20 +748,28 @@ class MSFS_LI_material():
         nodes = mat.node_tree.nodes
         links = mat.node_tree.links
 
+        bsdf_node = nodes.get("bsdf")
         albedo = nodes.get("albedo")
         albedo_tint_mix = nodes.get("albedo_tint_mix")
+        albedo_detail_mix = nodes.get("albedo_detail_mix")
 
         if albedo != None:
-            mat.node_tree.nodes["albedo"].image = mat.msfs_albedo_texture
-            if mat.msfs_albedo_texture.name != "":
+            nodes["albedo"].image = mat.msfs_albedo_texture
+
+            if mat.msfs_albedo_texture != None:
                 # Create the link:
                 if albedo_tint_mix != None:
                     links.new(albedo.outputs["Color"], albedo_tint_mix.inputs["Color2"])
+                if albedo_detail_mix != None:
+                    links.new(albedo_detail_mix.outputs["Color"], bsdf_node.inputs["Base Color"])
             else:
                 #unlink the separator:
                 if albedo_tint_mix != None:
                     l = albedo_tint_mix.inputs["Color2"].links[0]
-                    nodes.links.remove(l)                
+                    links.remove(l)                
+                if bsdf_node != None:
+                    l = bsdf_node.inputs["Base Color"].links[0]
+                    links.remove(l)                
 
     def match_metallic(self, context):
         mat = context.active_object.active_material
@@ -770,23 +778,26 @@ class MSFS_LI_material():
 
         #Try to generate the links:
         bsdf_node = nodes.get("bsdf")
+        metallic = nodes.get("metallic")
         metallic_sep_node = nodes.get("metallic_sep")
 
-        if mat.node_tree.nodes.get("metallic", None) != None:
+        if metallic != None:
             nodes["metallic"].image = mat.msfs_metallic_texture
-            nodes["metallic"].image.colorspace_settings.name = 'Non-Color'
 
-            #link to bsdf
-            if (bsdf_node != None and metallic_sep_node != None):
-                links.new(metallic_sep_node.outputs[1], bsdf_node.inputs["Roughness"])
-                links.new(metallic_sep_node.outputs[2], bsdf_node.inputs["Metallic"])
-        else:
-            #unlink the separator:
-            if (bsdf_node != None and metallic_sep_node != None):
-                l = bsdf_node.inputs["Roughness"].links[0]
-                mat.node_tree.links.remove(l)                
-                l = bsdf_node.inputs["Metallic"].links[0]
-                mat.node_tree.links.remove(l)                
+            if mat.msfs_metallic_texture != None:
+                nodes["metallic"].image.colorspace_settings.name = 'Non-Color'
+
+                #link to bsdf
+                if (bsdf_node != None and metallic_sep_node != None):
+                    links.new(metallic_sep_node.outputs[1], bsdf_node.inputs["Roughness"])
+                    links.new(metallic_sep_node.outputs[2], bsdf_node.inputs["Metallic"])
+            else:
+                #unlink the separator:
+                if (bsdf_node != None and metallic_sep_node != None):
+                    l = bsdf_node.inputs["Roughness"].links[0]
+                    links.remove(l)                
+                    l = bsdf_node.inputs["Metallic"].links[0]
+                    links.remove(l)                
 
     def match_normal(self, context):
         mat = context.active_object.active_material
@@ -794,18 +805,20 @@ class MSFS_LI_material():
         links = mat.node_tree.links
 
         bsdf_node = nodes.get("bsdf")
+        normal = nodes.get("normal")
         normal_map_node = nodes.get("normal_map_node")
 
-        if mat.node_tree.nodes.get("normal", None) != None:
-            mat.node_tree.nodes["normal"].image = mat.msfs_normal_texture
-            mat.node_tree.nodes["normal"].image.colorspace_settings.name = 'Non-Color'
-            if mat.msfs_normal_texture.name != "":
+        if normal != None:
+            nodes["normal"].image = mat.msfs_normal_texture
+
+            if mat.msfs_normal_texture != None:
+                nodes["normal"].image.colorspace_settings.name = 'Non-Color'
                 if (bsdf_node != None and normal_map_node != None):
-                    links.new(normal_map_node.outputs["Normal"], bsdf_node.inputs["Normal"])
+                        links.new(normal_map_node.outputs["Normal"], bsdf_node.inputs["Normal"])
             else:
                 if (bsdf_node != None and normal_map_node != None):
                     l = bsdf_node.inputs["Normal"].links[0]
-                    nodes.links.remove(l)                
+                    links.remove(l)                
 
     def match_emissive(self, context):
         mat = context.active_object.active_material
@@ -814,19 +827,21 @@ class MSFS_LI_material():
 
         #Try to generate the links:
         bsdf_node = nodes.get("bsdf")
+        emissive = nodes.get("emissive")
         emissive_tint_mix = nodes.get("emissive_tint_mix")
 
-        if mat.node_tree.nodes.get("emissive", None) != None:
-            mat.node_tree.nodes["emissive"].image = mat.msfs_emissive_texture
+        if emissive != None:
+            nodes["emissive"].image = mat.msfs_emissive_texture
 
-            #link to bsdf
-            if (bsdf_node != None and emissive_tint_mix != None):
-                links.new(emissive_tint_mix.outputs["Color"], bsdf_node.inputs["Emission"])
-        else:
-            #unlink the separator:
-            if (bsdf_node != None and emissive_tint_mix != None):
-                l = bsdf_node.inputs["Emission"].links[0]
-                nodes.links.remove(l)                
+            if mat.msfs_emissive_texture != "":
+                #link to bsdf
+                if (bsdf_node != None and emissive_tint_mix != None):
+                    links.new(emissive_tint_mix.outputs["Color"], bsdf_node.inputs["Emission"])
+            else:
+                #unlink the separator:
+                if (bsdf_node != None and emissive_tint_mix != None):
+                    l = bsdf_node.inputs["Emission"].links[0]
+                    links.remove(l)                
 
     def match_detail_albedo(self, context):
         mat = context.active_object.active_material
@@ -837,7 +852,8 @@ class MSFS_LI_material():
         detail_albedo = nodes.get("detail_albedo")
 
         if detail_albedo != None:
-            mat.node_tree.nodes["detail_albedo"].image = mat.msfs_detail_albedo_texture
+            nodes["detail_albedo"].image = mat.msfs_detail_albedo_texture
+            
             if mat.msfs_detail_albedo_texture.name != "":
                 # Create the link:
                 if (detail_albedo != None and albedo_detail_mix != None):
@@ -847,7 +863,7 @@ class MSFS_LI_material():
                 #unlink the separator:
                 if (detail_albedo != None and albedo_detail_mix != None):
                     l = albedo_detail_mix.inputs["Color2"].links[0]
-                    nodes.links.remove(l)                
+                    links.remove(l)                
                     albedo_detail_mix.inputs[0].default_value = 0.0
 
     def match_detail_metallic(self, context):
@@ -870,7 +886,7 @@ class MSFS_LI_material():
                 #unlink the separator:
                 if (detail_metallic != None and metallic_detail_mix != None):
                     l = metallic_detail_mix.inputs["Color2"].links[0]
-                    nodes.links.remove(l)                
+                    links.remove(l)                
                     metallic_detail_mix.inputs[0].default_value = 0.0
 
     def match_detail_normal(self, context):
@@ -893,7 +909,7 @@ class MSFS_LI_material():
                 #unlink the separator:
                 if (detail_normal != None and normal_detail_mix != None):
                     l = normal_detail_mix.inputs["Color2"].links[0]
-                    nodes.links.remove(l)                
+                    links.remove(l)                
                     normal_detail_mix.inputs[0].default_value = 0.0
 
     def match_blend_mask(self, context):
@@ -928,13 +944,13 @@ class MSFS_LI_material():
             else:
                 if albedo_detail_mix != None:
                     l = albedo_detail_mix.inputs["Fac"].links[0]
-                    nodes.links.remove(l)                
+                    links.remove(l)                
                 if metallic_detail_mix != None:
                     l = metallic_detail_mix.inputs["Fac"].links[0]
-                    nodes.links.remove(l)                
+                    links.remove(l)                
                 if normal_detail_mix != None:
                     l = normal_detail_mix.inputs["Fac"].links[0]
-                    nodes.links.remove(l)                
+                    links.remove(l)                
 
     def match_anisotropic_direction(self,context):
         mat = context.activate_object.active_material
@@ -960,9 +976,9 @@ class MSFS_LI_material():
                     links.new(clearcoat_sep.outputs["G"],bsdf_node.inputs["Clearcoat Roughness"])
                 else:
                     l = bsdf_node.inputs["Clearcoat"].links[0]
-                    nodes.links.remove(l)                
+                    links.remove(l)                
                     l = bsdf_node.inputs["Clearcoat Roughness"].links[0]
-                    nodes.links.remove(l)
+                    links.remove(l)
 
     def match_behind_glass(self,context):
         mat = context.active_object.active_material
@@ -983,7 +999,7 @@ class MSFS_LI_material():
                 #unlink the separator:
                 if (behind_glass != None and albedo_detail_mix != None):
                     l = albedo_detail_mix.inputs["Color2"].links[0]
-                    nodes.links.remove(l)                
+                    links.remove(l)                
 
     def match_wiper_mask(self, context):
         mat = context.active_object.active_material
