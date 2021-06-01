@@ -657,8 +657,8 @@ class GLTF_PT_export_include_ext_gltf(bpy.types.Panel):
 
         col = layout.column(align=True)#heading = "Data", align = True)
         col.prop(operator, 'export_extras')
-        col.prop(operator, 'export_cameras')
-        col.prop(operator, 'export_lights')
+        #col.prop(operator, 'export_cameras')
+        #col.prop(operator, 'export_lights')
 
 
 class GLTF_PT_export_transform_ext_gltf(bpy.types.Panel):

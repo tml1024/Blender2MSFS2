@@ -56,7 +56,7 @@ class MSFS_LI_material():
             mat.msfs_show_draworder = True
             mat.msfs_show_no_cast_shadow = True
             mat.msfs_show_double_sided = True
-            mat.msfs_show_responsive_aa = True
+            mat.msfs_show_responsive_aa = False
             mat.msfs_show_day_night_cycle = True
 
             mat.msfs_show_collision_material = True
@@ -101,7 +101,7 @@ class MSFS_LI_material():
             mat.msfs_show_draworder = True
             mat.msfs_show_no_cast_shadow = True
             mat.msfs_show_double_sided = True
-            mat.msfs_show_responsive_aa = True
+            mat.msfs_show_responsive_aa = False
             mat.msfs_show_day_night_cycle = False
 
             mat.msfs_show_collision_material = True
@@ -146,7 +146,7 @@ class MSFS_LI_material():
             mat.msfs_show_draworder = True
             mat.msfs_show_no_cast_shadow = True
             mat.msfs_show_double_sided = True
-            mat.msfs_show_responsive_aa = True
+            mat.msfs_show_responsive_aa = False
             mat.msfs_show_day_night_cycle = False
 
             mat.msfs_show_collision_material = True
@@ -191,7 +191,7 @@ class MSFS_LI_material():
             mat.msfs_show_draworder = True
             mat.msfs_show_no_cast_shadow = True
             mat.msfs_show_double_sided = True
-            mat.msfs_show_responsive_aa = True
+            mat.msfs_show_responsive_aa = False
             mat.msfs_show_day_night_cycle = False
 
             mat.msfs_show_collision_material = True
@@ -236,8 +236,8 @@ class MSFS_LI_material():
             mat.msfs_show_draworder = True
             mat.msfs_show_no_cast_shadow = True
             mat.msfs_show_double_sided = True
-            mat.msfs_show_responsive_aa = True
-            mat.msfs_show_day_night_cycle = False
+            mat.msfs_show_responsive_aa = False
+            mat.msfs_show_day_night_cycle = True
 
             mat.msfs_show_collision_material = True
             mat.msfs_show_road_material = True
@@ -281,7 +281,7 @@ class MSFS_LI_material():
             mat.msfs_show_draworder = True
             mat.msfs_show_no_cast_shadow = True
             mat.msfs_show_double_sided = True
-            mat.msfs_show_responsive_aa = True
+            mat.msfs_show_responsive_aa = False
             mat.msfs_show_day_night_cycle = False
 
             mat.msfs_show_collision_material = True
@@ -371,7 +371,7 @@ class MSFS_LI_material():
             mat.msfs_show_draworder = True
             mat.msfs_show_no_cast_shadow = True
             mat.msfs_show_double_sided = True
-            mat.msfs_show_responsive_aa = True
+            mat.msfs_show_responsive_aa = False
             mat.msfs_show_day_night_cycle = False
 
             mat.msfs_show_collision_material = True
@@ -416,7 +416,7 @@ class MSFS_LI_material():
             mat.msfs_show_draworder = True
             mat.msfs_show_no_cast_shadow = True
             mat.msfs_show_double_sided = True
-            mat.msfs_show_responsive_aa = True
+            mat.msfs_show_responsive_aa = False
             mat.msfs_show_day_night_cycle = False
 
             mat.msfs_show_collision_material = True
@@ -461,7 +461,7 @@ class MSFS_LI_material():
             mat.msfs_show_draworder = True
             mat.msfs_show_no_cast_shadow = True
             mat.msfs_show_double_sided = True
-            mat.msfs_show_responsive_aa = True
+            mat.msfs_show_responsive_aa = False
             mat.msfs_show_day_night_cycle = False
 
             mat.msfs_show_collision_material = True
@@ -506,7 +506,7 @@ class MSFS_LI_material():
             mat.msfs_show_draworder = True
             mat.msfs_show_no_cast_shadow = True
             mat.msfs_show_double_sided = True
-            mat.msfs_show_responsive_aa = True
+            mat.msfs_show_responsive_aa = False
             mat.msfs_show_day_night_cycle = False
 
             mat.msfs_show_collision_material = True
@@ -551,7 +551,7 @@ class MSFS_LI_material():
             mat.msfs_show_draworder = True
             mat.msfs_show_no_cast_shadow = True
             mat.msfs_show_double_sided = True
-            mat.msfs_show_responsive_aa = True
+            mat.msfs_show_responsive_aa = False
             mat.msfs_show_day_night_cycle = False
 
             mat.msfs_show_collision_material = True
@@ -596,7 +596,7 @@ class MSFS_LI_material():
             mat.msfs_show_draworder = True
             mat.msfs_show_no_cast_shadow = True
             mat.msfs_show_double_sided = True
-            mat.msfs_show_responsive_aa = True
+            mat.msfs_show_responsive_aa = False
             mat.msfs_show_day_night_cycle = False
 
             mat.msfs_show_collision_material = True
@@ -641,7 +641,7 @@ class MSFS_LI_material():
             mat.msfs_show_draworder = True
             mat.msfs_show_no_cast_shadow = True
             mat.msfs_show_double_sided = True
-            mat.msfs_show_responsive_aa = True
+            mat.msfs_show_responsive_aa = False
             mat.msfs_show_day_night_cycle = False
 
             mat.msfs_show_collision_material = True
@@ -1037,13 +1037,19 @@ class MSFS_LI_material():
 
     def update_color_emissive_mix(self, context):
         mat = context.active_object.active_material
-        if mat.node_tree.nodes.get("bsdf", None) != None:
-            mat.node_tree.nodes["bsdf"].inputs.get('Emission').default_value[0] = mat.msfs_color_emissive_mix[0]
-            mat.node_tree.nodes["bsdf"].inputs.get('Emission').default_value[1] = mat.msfs_color_emissive_mix[1]
-            mat.node_tree.nodes["bsdf"].inputs.get('Emission').default_value[2] = mat.msfs_color_emissive_mix[2]
-            mat.node_tree.nodes.get("emission_tint").outputs[0].default_value[0] = mat.msfs_color_emissive_mix[0]
-            mat.node_tree.nodes.get("emission_tint").outputs[0].default_value[1] = mat.msfs_color_emissive_mix[1]
-            mat.node_tree.nodes.get("emission_tint").outputs[0].default_value[2] = mat.msfs_color_emissive_mix[2]
+        nodes = mat.node_tree.nodes
+
+        bsdf = nodes.get("bsdf", None)
+        emissive_tint = nodes.get("emissive_tint", None)
+
+        if bsdf != None:
+            bsdf.inputs.get('Emission').default_value[0] = mat.msfs_color_emissive_mix[0]
+            bsdf.inputs.get('Emission').default_value[1] = mat.msfs_color_emissive_mix[1]
+            bsdf.inputs.get('Emission').default_value[2] = mat.msfs_color_emissive_mix[2]
+        if emissive_tint != None:
+            emissive_tint.outputs[0].default_value[0] = mat.msfs_color_emissive_mix[0]
+            emissive_tint.outputs[0].default_value[1] = mat.msfs_color_emissive_mix[1]
+            emissive_tint.outputs[0].default_value[2] = mat.msfs_color_emissive_mix[2]
 
     def update_color_sss(self, context):
         mat = context.active_object.active_material

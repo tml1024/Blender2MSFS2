@@ -63,25 +63,36 @@ class MSFS_PT_ObjectProperties(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
 
-        if bpy.context.active_object.type == 'ARMATURE':
-            box=layout.box()
-            box.label(text = "Behavior tags are stored in individual bones.", icon = 'ANIM')
-        else:
-            box=layout.box()
-            box.label(text = "Behavior list", icon = 'ANIM')
-            box.template_list('OBJECTBEHAVIOR_UL_listItem', "", context.object, 'msfs_behavior', context.object, 'msfs_active_behavior')
+        if bpy.context.active_object.type == 'LIGHT':
+            box = layout.box()
+            box.label(text = "MSFS Light parameters", icon='LIGHT')
+            box.prop(bpy.context.active_object, 'msfs_light_has_symmetry')
+            box.prop(bpy.context.active_object, 'msfs_light_flash_frequency')
+            box.prop(bpy.context.active_object, 'msfs_light_flash_duration')
+            box.prop(bpy.context.active_object, 'msfs_light_flash_phase')
+            box.prop(bpy.context.active_object, 'msfs_light_rotation_speed')
+            box.prop(bpy.context.active_object, 'msfs_light_day_night_cycle')
 
-            if len(context.object.msfs_behavior) > context.object.msfs_active_behavior:
-                behavior = context.object.msfs_behavior[context.object.msfs_active_behavior]
 
-                subbox=box.box()
-                subbox.label(text=behavior.name,icon='OUTLINER_DATA_GP_LAYER')
-                if behavior.source_file != "":
-                    subbox.label(text="XML: %s"%behavior.source_filename,icon='FILE')
-                split=subbox.split(factor=0.75)
-                split.label(text="Keyframes start: %i"%behavior.kf_start,icon='DECORATE_KEYFRAME')
-                split.label(text="end: %i"%behavior.kf_end)
-                subbox.operator('msfs.behavior_remove_selected_from_object',text="Remove selected behavior",icon='TRASH')
+        #if bpy.context.active_object.type == 'ARMATURE':
+        #    box=layout.box()
+        #    box.label(text = "Behavior tags are stored in individual bones.", icon = 'ANIM')
+        #else:
+        #    box=layout.box()
+        #    box.label(text = "Behavior list", icon = 'ANIM')
+        #    box.template_list('OBJECTBEHAVIOR_UL_listItem', "", context.object, 'msfs_behavior', context.object, 'msfs_active_behavior')
+
+        #    if len(context.object.msfs_behavior) > context.object.msfs_active_behavior:
+        #        behavior = context.object.msfs_behavior[context.object.msfs_active_behavior]
+
+        #        subbox=box.box()
+        #        subbox.label(text=behavior.name,icon='OUTLINER_DATA_GP_LAYER')
+        #        if behavior.source_file != "":
+        #            subbox.label(text="XML: %s"%behavior.source_filename,icon='FILE')
+        #        split=subbox.split(factor=0.75)
+        #        split.label(text="Keyframes start: %i"%behavior.kf_start,icon='DECORATE_KEYFRAME')
+        #        split.label(text="end: %i"%behavior.kf_end)
+        #        subbox.operator('msfs.behavior_remove_selected_from_object',text="Remove selected behavior",icon='TRASH')
 
 
 

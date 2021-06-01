@@ -75,15 +75,33 @@ class glTF2ExportUserExtension:
             )
 
     def gather_node_hook(self, gltf2_object, blender_object, export_settings):
+        import math
+
         if self.properties.enabled == True:
             if gltf2_object.extensions is None:
                 gltf2_object.extensions = {}
-#            gltf2_object.extensions["ASOBO_node_test"] = self.Extension(
-#                name="ASOBO_node_test",
-#                extension={"This_is_a_cool_value": 42.0},
-#                required=False
-#            )
 
+            if blender_object.type == 'LIGHT':
+                angle = 360.0
+                if blender_object.data.type == 'SPOT':
+                    angle = (180.0 / math.pi) * blender_object.data.spot_size
+
+                gltf2_object.extensions["ASOBO_macro_light"] = self.Extension(
+                    name = "ASOBO_macro_light",
+                    extension={
+                        "color": [blender_object.data.color[0],blender_object.data.color[1],blender_object.data.color[2]],
+                        "intensity": blender_object.data.energy,
+                        "cone_angle": angle,
+                        "has_simmetry": blender_object.msfs_light_has_symmetry,
+                        "flash_frequency": blender_object.msfs_light_flash_frequency,
+                        "flash_duration": blender_object.msfs_light_flash_duration,
+                        "flash_phase": blender_object.msfs_light_flash_phase,
+                        "rotation_speed": blender_object.msfs_light_rotation_speed,
+                        "day_night_cycle": blender_object.msfs_light_day_night_cycle,
+                    },
+                    required = False
+                )
+                
 
     def gather_material_hook(self, gltf2_material, blender_material, export_settings):
         if (self.properties.enabled == True and blender_material.msfs_material_mode != None):
@@ -116,7 +134,7 @@ class glTF2ExportUserExtension:
                     if blender_material.msfs_day_night_cycle == True:
                         gltf2_material.extensions["ASOBO_material_day_night_switch"] = self.Extension(
                             name="ASOBO_material_day_night_switch",
-                            extension={ },
+                            extension={ "enabled": True },
                             required=False
                         )
 

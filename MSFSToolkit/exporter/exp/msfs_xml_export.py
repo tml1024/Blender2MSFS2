@@ -120,7 +120,7 @@ def save_xml(context, export_settings, lods=[]):
     else:
         root = etree.Element("root")
         ModelInfo_node = etree.SubElement(root, "ModelInfo")
-        ModelInfo_node.set('version', "1.0")
+        ModelInfo_node.set('version', "1.1")
         if export_settings['gltf_msfs_generate_guid'] == True:
             ModelInfo_node.set('guid',guid)
         if len(lods) > 0:

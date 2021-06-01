@@ -30,7 +30,8 @@ import traceback
 
 from io_scene_gltf2.blender.com import gltf2_blender_json
 from io_scene_gltf2.blender.exp import gltf2_blender_export_keys
-from io_scene_gltf2.blender.exp import gltf2_blender_gather
+from . import gltf2_blender_gather
+#from io_scene_gltf2.blender.exp import gltf2_blender_gather
 from .gltf2_blender_gltf2_exporter import GlTF2Exporter #replacing the original exporter here.
 from io_scene_gltf2.io.com.gltf2_io_debug import print_console, print_newline
 from io_scene_gltf2.io.exp import gltf2_io_export
