@@ -7,6 +7,8 @@ The intent of this repository is to enable people to co-operate on further work 
 
 If the original author re-appears and starts releasing newer versions, this repository might well become obsolete.
 
+The original README is MSFSToolkit/readme.md
+
 There are also other efforts on export from Blender to MSFS, and even import of MSFS 3D assets to Blender.
 
 The most promising is perhaps https://github.com/flybywiresim/msfs2blender2msfs , which is forked from the official Khronos glTF 2.0 importer and exporter. Sadly, that too apparently is stagnating.
