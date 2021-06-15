@@ -270,6 +270,24 @@ class ExportExtendedGLTF2_Base:
         default=False
     )
 
+    use_visible: BoolProperty(
+        name='Visible Objects',
+        description='Export visible objects only',
+        default=False
+    )
+
+    use_renderable: BoolProperty(
+        name='Renderable Objects',
+        description='Export renderable objects only',
+        default=False
+    )
+
+    use_active_collection: BoolProperty(
+        name='Active Collection',
+        description='Export objects in the active collection only',
+        default=False
+    )
+
     export_extras: BoolProperty(
         name='Custom Properties',
         description='Export custom properties as glTF extras',
@@ -422,9 +440,20 @@ class ExportExtendedGLTF2_Base:
 
     def save_settings(self, context):
         # find all export_ props
+        exceptional = [
+            # options that don't start with 'export_'
+            'use_selection',
+            'use_visible',
+            'use_renderable',
+            'use_active_collection',
+            'use_mesh_edges',
+            'use_mesh_vertices',
+        ]
         all_props = self.properties
-        export_props = {x: getattr(self, x) for x in dir(all_props)
-                        if (x.startswith("export_") or x == "use_selection") and all_props.get(x) is not None}
+        export_props = {
+            x: getattr(self, x) for x in dir(all_props)
+            if (x.startswith("export_") or x in exceptional) and all_props.get(x) is not None
+        }
 
         context.scene[self.scene_key] = export_props
 
@@ -491,6 +520,11 @@ class ExportExtendedGLTF2_Base:
             export_settings['gltf_selected'] = self.use_selection
 
         # export_settings['gltf_selected'] = self.use_selection This can be uncomment when removing compatibility of export_selected
+
+        export_settings['gltf_visible'] = self.use_visible
+        export_settings['gltf_renderable'] = self.use_renderable
+        export_settings['gltf_active_collection'] = self.use_active_collection
+
         export_settings['gltf_layers'] = True  # self.export_layers
         export_settings['gltf_extras'] = self.export_extras
         export_settings['gltf_yup'] = self.export_yup
@@ -654,6 +688,9 @@ class GLTF_PT_export_include_ext_gltf(bpy.types.Panel):
 
         col = layout.column(align=True)#heading = "Limit to", align = True)
         col.prop(operator, 'use_selection')
+        col.prop(operator, 'use_visible')
+        col.prop(operator, 'use_renderable')
+        col.prop(operator, 'use_active_collection')
 
         col = layout.column(align=True)#heading = "Data", align = True)
         col.prop(operator, 'export_extras')
