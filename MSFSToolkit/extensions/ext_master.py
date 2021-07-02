@@ -128,7 +128,9 @@ class glTF2ExportUserExtension:
                         if blender_material.msfs_road_material == True:
                             new_ext["tags"] = ["Road"]
                         if blender_material.msfs_collision_material == True:
-                            new_ext["Collision"] = True
+                            new_ext["tags"] = ["Collision"]
+                        if blender_material.msfs_collision_material == True and blender_material.msfs_road_material == True:
+                            new_ext["tags"] = ["Road", "Collision"]
 
                         gltf2_material.extensions["ASOBO_tags"] = self.Extension(
                             name="ASOBO_tags",
