@@ -9,7 +9,7 @@ September 2020. That is hardly ideal.
 The intent of this repository is to enable people to co-operate on
 further work on this exporter.
 
-I am not personally adopting this code, and/or volunteering to
+I (Tor Lillqvist) am not personally adopting this code, and/or volunteering to
 maintain it, as I don't have the skills needed. I am not a Python
 expert at all. I don't know Blender's data structures (as accessible
 from Python). I don't really know glTF at all. And finally, I have
