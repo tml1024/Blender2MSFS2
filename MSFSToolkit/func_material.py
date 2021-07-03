@@ -136,25 +136,30 @@ def CreatePBRBranch(Material, bsdf_node, offset=(0.0,0.0)):
     base_color_tint.outputs[0].default_value[0]=Material.msfs_color_albedo_mix[0]
     base_color_tint.outputs[0].default_value[1]=Material.msfs_color_albedo_mix[1]
     base_color_tint.outputs[0].default_value[2]=Material.msfs_color_albedo_mix[2]
-    base_color_tint.outputs[0].default_value[3]=1.0
+    base_color_tint.outputs[0].default_value[3]=Material.msfs_color_alpha_mix
     base_color_tint_mix = CreateNewNode(Material,'ShaderNodeMixRGB',"albedo_tint_mix",location=(offset[0]+350,offset[1]+20))
     base_color_tint_mix.hide = True
     base_color_tint_mix.blend_type = 'MULTIPLY'
     base_color_tint_mix.inputs[0].default_value = 1.0
+    base_color_tint_mix.inputs[1].default_value[0] = 1.0
+    base_color_tint_mix.inputs[1].default_value[1] = 1.0
+    base_color_tint_mix.inputs[1].default_value[2] = 1.0
     base_color_detail_mix = CreateNewNode(Material,'ShaderNodeMixRGB',"albedo_detail_mix",location=(offset[0]+550,offset[1]+20))
     base_color_detail_mix.hide = True
-    base_color_detail_mix.blend_type = 'MIX'
-    base_color_detail_mix.inputs[0].default_value = 0.0
-    base_color_detail_mix.inputs["Color2"].default_value = (1.0,1.0,1.0,1.0)
+    base_color_detail_mix.blend_type = 'MULTIPLY'
+    base_color_detail_mix.inputs[0].default_value = Material.msfs_color_base_mix
+    base_color_detail_mix.inputs[2].default_value[0] = Material.msfs_color_albedo_mix[0]
+    base_color_detail_mix.inputs[2].default_value[1] = Material.msfs_color_albedo_mix[1]
+    base_color_detail_mix.inputs[2].default_value[2] = Material.msfs_color_albedo_mix[2]
+    base_color_detail_mix.inputs[2].default_value[3] = Material.msfs_color_base_mix
+    # base_color_detail_mix.inputs["Color2"].default_value = (1.0,1.0,1.0,1.0)
 
     # Assign texture, if already saved in msfs data:
     if Material.msfs_albedo_texture != None:
         if Material.msfs_albedo_texture.name != "":
             base_color_node.image = Material.msfs_albedo_texture
             links.new(base_color_node.outputs["Color"], base_color_tint_mix.inputs["Color2"])
-
-    #Disconnected to preserve color in glTF
-    #links.new(base_color_detail_mix.outputs["Color"], bsdf_node.inputs["Base Color"])
+            links.new(base_color_detail_mix.outputs["Color"], bsdf_node.inputs["Base Color"])
 
     #Create the Alpha path:
     alpha_multiply = CreateNewNode(Material,'ShaderNodeMath',"alpha_multiply",location=(offset[0]+550,offset[1]-350))
@@ -166,7 +171,8 @@ def CreatePBRBranch(Material, bsdf_node, offset=(0.0,0.0)):
     #Link the UV:
     links.new(uv_node.outputs["UV"], base_color_node.inputs["Vector"])
     #Create albedo links:
-    links.new(base_color_tint.outputs["Color"], base_color_tint_mix.inputs["Color1"])
+    #links.new(base_color_tint.outputs["Color"], base_color_detail_mix.inputs["Color2"])
+    #links.new(base_color_tint.outputs["Color"], base_color_tint_mix.inputs["Color1"])
     links.new(base_color_tint_mix.outputs["Color"], base_color_detail_mix.inputs["Color1"])
 
     #Link the Alpha:
@@ -791,8 +797,3 @@ def CreateMSFSEnvOccluderShader(Material):
 
     #enable transparency:
     MakeTranslucent(Material)
-
-
-
-
-
