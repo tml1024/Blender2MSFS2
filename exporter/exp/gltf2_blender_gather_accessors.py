@@ -19,7 +19,9 @@ from ..com import gltf2_io_constants
 from . import gltf2_io_binary_data
 
 
-@cached
+#@cached
+#For batch LOD exports, this decorator should not be applied in order to
+#force one interation for each LOD. "PhysicsTeacher" 2021-08-05
 def gather_accessor(buffer_view: gltf2_io_binary_data.BinaryData,
                     component_type: gltf2_io_constants.ComponentType,
                     count,
