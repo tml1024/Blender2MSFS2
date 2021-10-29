@@ -28,6 +28,7 @@ bl_info = {
     "wiki_url": "https://www.fsdeveloper.com/wiki/index.php?title=Blender2MSFS"
 }
 
+import bpy
 
 from . import auto_load
 
@@ -49,12 +50,52 @@ from . extensions import *
 
 auto_load.init()
 
+## class to add the preference settings
+class addSettingsPanel(bpy.types.AddonPreferences):
+    bl_idname = __package__
+ 
+    settings_default_texture_location: bpy.props.StringProperty (
+        name = "Default Texture Location",
+        description = "Default Texture Location",
+        default = ""
+      
+    )
+
+    
+
+    settings_default_copyright: bpy.props.StringProperty (
+        name = "Default Copyright Name",
+        description = "Default Copyright Name",
+        default = ""
+      
+    )
+
+    ##bpy.types.Scene.toto = settings_default_copyright
+
+   ## bpy.types.Scene.my_sel_value = bpy.props.StringProperty(name="Sel")
+
+    ## draw the panel in the addon preferences
+    def draw(self, context):
+        layout = self.layout
+        box = layout.box()
+
+        ##row = layout.row()
+        col = box.column(align = True)
+
+        ## texture default location
+        col.prop(self, 'settings_default_texture_location', expand=True)
+
+        ## default copyright
+        col.prop(self, 'settings_default_copyright', expand=True)
+
+
 def register():
     auto_load.register()
     from .extensions import register
     register()
     from .exporter import register
     register()
+    bpy.utils.register_class(addSettingsPanel)
 
     #removed by request of scenery designers.
     #bpy.types.Scene.msfs_guid = bpy.props.StringProperty(name="GUID",default="")
@@ -69,6 +110,7 @@ def unregister():
     #from .exporter import unregister
     #unregister()
     auto_load.unregister()
+    bpy.utils.unregister_class(addSettingsPanel)
 
 def unregister_panel():
     from .extensions import unregister_panel
