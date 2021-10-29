@@ -29,6 +29,7 @@ bl_info = {
 }
 
 import bpy
+from bpy.types import AddonPreferences
 
 from . import auto_load
 
@@ -58,21 +59,13 @@ class addSettingsPanel(bpy.types.AddonPreferences):
         name = "Default Texture Location",
         description = "Default Texture Location",
         default = ""
-      
     )
-
-    
 
     settings_default_copyright: bpy.props.StringProperty (
         name = "Default Copyright Name",
         description = "Default Copyright Name",
         default = ""
-      
     )
-
-    ##bpy.types.Scene.toto = settings_default_copyright
-
-   ## bpy.types.Scene.my_sel_value = bpy.props.StringProperty(name="Sel")
 
     ## draw the panel in the addon preferences
     def draw(self, context):

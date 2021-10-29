@@ -92,6 +92,10 @@ class ExportExtendedGLTF2_Base:
 
     bl_options = {'PRESET'}
 
+    ## Retrieve preferences settings
+    preferences = bpy.context.preferences
+    addon_prefs = preferences.addons[__package__].preferences
+
     export_format: EnumProperty(
         name='Format',
         items=(('GLB', 'glTF Binary (.glb)',
@@ -122,7 +126,7 @@ class ExportExtendedGLTF2_Base:
     export_copyright: StringProperty(
         name='Copyright',
         description='Legal rights and conditions for the model',
-        default=''
+        default=addon_prefs.settings_default_copyright
     )
 
     export_image_format: EnumProperty(
@@ -144,7 +148,7 @@ class ExportExtendedGLTF2_Base:
     export_texture_dir: StringProperty(
         name='Textures',
         description='Folder to place texture files in. Relative to the .gltf file',
-        default='',
+        default=addon_prefs.settings_default_texture_location,
     )
 
     #############################################
