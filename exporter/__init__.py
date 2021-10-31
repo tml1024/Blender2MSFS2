@@ -312,6 +312,12 @@ class ExportExtendedGLTF2_Base:
         default=True
     )
 
+    export_force_sampling: BoolProperty(
+        name="Always Sample Animations",
+        description="Apply sampling to all animations",
+        default=True,
+    )
+
     export_frame_range: BoolProperty(
         name='Limit to Playback Range',
         description='Clips animations to selected playback range',
@@ -543,6 +549,7 @@ class ExportExtendedGLTF2_Base:
             export_settings['gltf_move_keyframes'] = False
             export_settings['gltf_force_sampling'] = False
             export_settings['gltf_def_bones'] = False
+
         export_settings['gltf_skins'] = self.export_skins
         if self.export_skins:
             export_settings['gltf_all_vertex_influences'] = self.export_all_influences
@@ -821,6 +828,7 @@ class GLTF_PT_export_animation_ext_gltf(bpy.types.Panel):
         operator = sfile.active_operator
 
         layout.prop(operator, 'export_current_frame')
+        layout.prop(operator, 'export_force_sampling')
 
 
 class GLTF_PT_export_animation_export_ext_gltf(bpy.types.Panel):
