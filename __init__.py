@@ -55,13 +55,13 @@ auto_load.init()
 class addSettingsPanel(bpy.types.AddonPreferences):
     bl_idname = __package__
  
-    settings_default_texture_location: bpy.props.StringProperty (
+    export_texture_dir: bpy.props.StringProperty (
         name = "Default Texture Location",
         description = "Default Texture Location",
         default = ""
     )
 
-    settings_default_copyright: bpy.props.StringProperty (
+    export_copyright: bpy.props.StringProperty (
         name = "Default Copyright Name",
         description = "Default Copyright Name",
         default = ""
@@ -76,10 +76,10 @@ class addSettingsPanel(bpy.types.AddonPreferences):
         col = box.column(align = True)
 
         ## texture default location
-        col.prop(self, 'settings_default_texture_location', expand=True)
+        col.prop(self, 'export_texture_dir', expand=True)
 
         ## default copyright
-        col.prop(self, 'settings_default_copyright', expand=True)
+        col.prop(self, 'export_copyright', expand=True)
 
 
 def register():

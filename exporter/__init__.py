@@ -22,7 +22,6 @@
 #
 ###################################################################################################
 
-import bpy
 
 #from io_scene_gltf2 import *
 
@@ -92,10 +91,6 @@ class ExportExtendedGLTF2_Base:
 
     bl_options = {'PRESET'}
 
-    ## Retrieve preferences settings
-    preferences = bpy.context.preferences
-    addon_prefs = preferences.addons[__package__].preferences
-
     export_format: EnumProperty(
         name='Format',
         items=(('GLB', 'glTF Binary (.glb)',
@@ -126,7 +121,7 @@ class ExportExtendedGLTF2_Base:
     export_copyright: StringProperty(
         name='Copyright',
         description='Legal rights and conditions for the model',
-        default=addon_prefs.settings_default_copyright
+        default=""
     )
 
     export_image_format: EnumProperty(
@@ -148,7 +143,7 @@ class ExportExtendedGLTF2_Base:
     export_texture_dir: StringProperty(
         name='Textures',
         description='Folder to place texture files in. Relative to the .gltf file',
-        default=addon_prefs.settings_default_texture_location,
+        default="",
     )
 
     #############################################
@@ -964,7 +959,16 @@ class ExportExtendedGLTF2(bpy.types.Operator, ExportExtendedGLTF2_Base, ExportHe
 
 
 def menu_func_export(self, context):
-    self.layout.operator(ExportExtendedGLTF2.bl_idname, text='extended glTF 2.0 (.glb/.gltf) for MSFS')
+    # split to get the real addon name
+    name = __name__.split(".")[0]
+    preferences = context.preferences.addons.get(name)
+    op = self.layout.operator(ExportExtendedGLTF2.bl_idname, text='extended glTF 2.0 (.glb/.gltf) for MSFS')
+
+    # if preferences are defined
+    if preferences:
+        addon_prefs = preferences.preferences
+        op.export_copyright = addon_prefs.export_copyright
+        op.export_texture_dir = addon_prefs.export_texture_dir
 
 
 classes = (
