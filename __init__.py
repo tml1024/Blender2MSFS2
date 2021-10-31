@@ -28,9 +28,6 @@ bl_info = {
     "wiki_url": "https://www.fsdeveloper.com/wiki/index.php?title=Blender2MSFS"
 }
 
-import bpy
-from bpy.types import AddonPreferences
-
 from . import auto_load
 
 from . func_behavior import *
@@ -70,16 +67,18 @@ class addSettingsPanel(bpy.types.AddonPreferences):
     ## draw the panel in the addon preferences
     def draw(self, context):
         layout = self.layout
-        box = layout.box()
 
-        ##row = layout.row()
-        col = box.column(align = True)
+        row = layout.row()
+        row.label(text="Optional - You can set here the default values. This will be used in the export window", icon='INFO')
+
+        box = layout.box()
+        col = box.column(align = False)
 
         ## texture default location
-        col.prop(self, 'export_texture_dir', expand=True)
+        col.prop(self, 'export_texture_dir', expand=False)
 
         ## default copyright
-        col.prop(self, 'export_copyright', expand=True)
+        col.prop(self, 'export_copyright', expand=False)
 
 
 def register():
