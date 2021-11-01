@@ -121,7 +121,7 @@ class ExportExtendedGLTF2_Base:
     export_copyright: StringProperty(
         name='Copyright',
         description='Legal rights and conditions for the model',
-        default=""
+        default=''
     )
 
     export_image_format: EnumProperty(
@@ -143,7 +143,7 @@ class ExportExtendedGLTF2_Base:
     export_texture_dir: StringProperty(
         name='Textures',
         description='Folder to place texture files in. Relative to the .gltf file',
-        default="",
+        default='',
     )
 
     #############################################
@@ -827,9 +827,12 @@ class GLTF_PT_export_animation_ext_gltf(bpy.types.Panel):
         sfile = context.space_data
         operator = sfile.active_operator
 
+        layout.prop(operator, "export_frame_range")
+        layout.prop(operator, "export_frame_step")
         layout.prop(operator, 'export_current_frame')
         layout.prop(operator, 'export_force_sampling')
-
+        layout.prop(operator, "export_nla_strips")
+        layout.prop(operator, "export_def_bones")
 
 class GLTF_PT_export_animation_export_ext_gltf(bpy.types.Panel):
     bl_space_type = 'FILE_BROWSER'
