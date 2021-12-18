@@ -42,7 +42,6 @@ def pretty_xml_given_root(root):
     Useful for when you are editing xml data on the fly
     """
     xml_string = minidom.parseString(etree.tostring(root)).toprettyxml()
-    xml_string = os.linesep.join([s for s in xml_string.splitlines() if s.strip()]) # remove the weird newline issue
     return xml_string
 
 def save_xml(context, export_settings, lods=[]):
@@ -67,7 +66,8 @@ def save_xml(context, export_settings, lods=[]):
         #Since Asobo doesn't stick to conventions, we need to add a root-node to the file:
         xml_string = '<root>'+xml_string+'</root>'
 
-        root = etree.fromstring(xml_string.lstrip())
+        # Remove formatting prior to loading to avoid newline issues
+        root = etree.fromstring(re.sub('\s+(?=<)', '', xml_string))
 
         msfs_guid = ""
 
@@ -146,9 +146,8 @@ def save_xml(context, export_settings, lods=[]):
     # Create a string, make it pretty:
     xml_string = pretty_xml_given_root(root)
 
-    # Remove root node:
-    xml_string = re.sub('<root>', '', xml_string)
-    xml_string = re.sub('</root>', '', xml_string)
+    # Remove declaration and root node, and step back indent by one level
+    xml_string = xml_string.replace("\n\t", "\n").replace("<?xml version=\"1.0\" ?>\n", "").replace("<root>\n", "").replace("\n</root>", "")
     
     #Write to file:
     with open(xml_file, "w") as f:
