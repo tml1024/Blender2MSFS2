@@ -37,19 +37,20 @@ def save_ext_gltf(context, export_settings):
     from . import gltf2_blender_export
 
     lods = []
-    pattern = re.compile("[Xx]\d+")
-    rpattern = re.compile("[Xx]")
+    lod_pattern = re.compile("^x(\d+)", re.IGNORECASE)
     filename_base, extension = os.path.splitext(export_settings['gltf_filepath'])
     filename, extension = os.path.splitext(os.path.basename(export_settings['gltf_filepath']))
 
     lod_model_export_settings = export_settings.copy()
     
     for collection in bpy.data.collections:
-        if pattern.match(collection.name):
+        match = lod_pattern.match(collection.name)
+
+        if match:
             #save collection name in export settings:
             lod_model_export_settings['gltf_current_collection'] = collection.name
 
-            lod_id = str(rpattern.subn('_LOD', collection.name)[0])
+            lod_id = "_LOD" + match.group(1)
             lod_filename = filename_base+lod_id+extension
             lods.append(lod_filename)
 
