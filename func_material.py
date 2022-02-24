@@ -191,6 +191,22 @@ def CreatePBRBranch(Material, bsdf_node, offset=(0.0,0.0)):
     metallic_separate = CreateNewNode(Material,'ShaderNodeSeparateRGB',"metallic_sep",location=(offset[0]+550,offset[1]-305))
     metallic_separate.hide = True
 
+     # Roughness scale
+    roughness_scale_node = CreateNewNode(Material,'ShaderNodeMath',"roughness_scale_node",location=(offset[0]+750,offset[1]-355))
+    roughness_scale_node.hide = True
+    roughness_scale_node.operation = 'MULTIPLY'
+    roughness_scale_node.use_clamp = True
+    roughness_scale_node.inputs[1].default_value  = Material.msfs_roughness_scale
+ 
+   # Metallic scale
+    metallic_scale_node = CreateNewNode(Material,'ShaderNodeMath',"metallic_scale_node",location=(offset[0]+750,offset[1]-405))
+    metallic_scale_node.hide = True
+    metallic_scale_node.operation = 'MULTIPLY'
+    metallic_scale_node.use_clamp = True
+    metallic_scale_node.inputs[1].default_value  = Material.msfs_metallic_scale
+
+
+
     # Create a node group for the occlusion map
     #Let's see if the node tree already exists, if not create one.
     occlusion_node_tree = bpy.data.node_groups.get("glTF Settings")
@@ -207,16 +223,19 @@ def CreatePBRBranch(Material, bsdf_node, offset=(0.0,0.0)):
 
     #Link the UV:
     links.new(uv_node.outputs["UV"], texture_metallic_node.inputs["Vector"])
+
     #Create metallic links:
     links.new(texture_metallic_node.outputs["Color"], metallic_detail_mix.inputs["Color1"])
     links.new(metallic_detail_mix.outputs["Color"], metallic_separate.inputs["Image"])
     links.new(metallic_separate.outputs[0], occlusion_group.inputs["Occlusion"])
+    links.new(metallic_separate.outputs[1], roughness_scale_node.inputs[0])
+    links.new(metallic_separate.outputs[2], metallic_scale_node.inputs[0])
     if Material.msfs_metallic_texture != None:
         if Material.msfs_metallic_texture.name != "":
             #link to bsdf
             if (bsdf_node != None and metallic_separate != None):
-                links.new(metallic_separate.outputs[1], bsdf_node.inputs["Roughness"])
-                links.new(metallic_separate.outputs[2], bsdf_node.inputs["Metallic"])
+                links.new(roughness_scale_node.outputs[0], bsdf_node.inputs["Roughness"])
+                links.new(metallic_scale_node.outputs[0], bsdf_node.inputs["Metallic"])
 
 
     # Normal map
