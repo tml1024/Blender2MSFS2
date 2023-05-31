@@ -1,4 +1,7 @@
 # Blender2MSFS2
+
+# This is now obsolete as there is an official Blender export plugin, at https://github.com/AsoboStudio/glTF-Blender-IO-MSFS
+
 Collaborative adoption of Blender2MSFS which apparently has been left in limbo by its author
 
 The releases of the upstream Blender2MSFS are archived at
