@@ -781,7 +781,8 @@ class MSFS_LI_material():
         #Try to generate the links:
         bsdf_node = nodes.get("bsdf")
         metallic = nodes.get("metallic")
-        metallic_sep_node = nodes.get("metallic_sep")
+        metallic_scale_node = nodes.get("metallic_scale_node")
+        roughness_scale_node = nodes.get("roughness_scale_node")
 
         if metallic != None:
             nodes["metallic"].image = mat.msfs_metallic_texture
@@ -790,16 +791,20 @@ class MSFS_LI_material():
                 nodes["metallic"].image.colorspace_settings.name = 'Non-Color'
 
                 #link to bsdf
-                if (bsdf_node != None and metallic_sep_node != None):
-                    links.new(metallic_sep_node.outputs[1], bsdf_node.inputs["Roughness"])
-                    links.new(metallic_sep_node.outputs[2], bsdf_node.inputs["Metallic"])
+                if bsdf_node != None:
+                    if roughness_scale_node != None:
+                        links.new(roughness_scale_node.outputs[0], bsdf_node.inputs["Roughness"])
+                    if metallic_scale_node != None: 
+                        links.new(metallic_scale_node.outputs[0],bsdf_node.inputs["Metallic"])
             else:
-                #unlink the separator:
-                if (bsdf_node != None and metallic_sep_node != None):
-                    l = bsdf_node.inputs["Roughness"].links[0]
-                    links.remove(l)                
-                    l = bsdf_node.inputs["Metallic"].links[0]
-                    links.remove(l)                
+                #unlink the metallic/roughness scales:
+                if bsdf_node != None:
+                    if roughness_scale_node != None:
+                        l = bsdf_node.inputs["Roughness"].links[0]
+                        links.remove(l) 
+                    if metallic_scale_node != None:               
+                        l = bsdf_node.inputs["Metallic"].links[0]
+                        links.remove(l)                
 
     def match_normal(self, context):
         mat = context.active_object.active_material
@@ -1082,6 +1087,16 @@ class MSFS_LI_material():
         if mat.node_tree.nodes.get("normal_map_node", None) != None:
             mat.node_tree.nodes["normal_map_node"].inputs["Strength"].default_value = mat.msfs_normal_scale
 
+    def update_metallic_scale(self,context):
+        mat = context.active_object.active_material
+        if mat.node_tree.nodes.get("metallic_scale_node", None) != None:
+            mat.node_tree.nodes["metallic_scale_node"].inputs[1].default_value = mat.msfs_metallic_scale
+
+    def update_roughness_scale(self,context):
+        mat = context.active_object.active_material
+        if mat.node_tree.nodes.get("roughness_scale_node", None) != None:
+            mat.node_tree.nodes["roughness_scale_node"].inputs[1].default_value = mat.msfs_roughness_scale
+
     def update_detail_uv_scale(self,context):
         mat = context.active_object.active_material
         if mat.node_tree.nodes.get("detail_uv_scale", None) != None:
@@ -1239,8 +1254,8 @@ class MSFS_LI_material():
     Material.msfs_uv_clamp_z = bpy.props.BoolProperty(name="Z",default=False)
 
     #Material parameters
-    Material.msfs_roughness_scale = bpy.props.FloatProperty(name="Roughness scale",min=0,max=1,default=1)
-    Material.msfs_metallic_scale = bpy.props.FloatProperty(name="Metallic scale",min=0,max=1,default=1)
+    Material.msfs_roughness_scale = bpy.props.FloatProperty(name="Roughness scale",min=0,max=1,default=1,update=update_roughness_scale)
+    Material.msfs_metallic_scale = bpy.props.FloatProperty(name="Metallic scale",min=0,max=1,default=1,update=update_metallic_scale)
     Material.msfs_normal_scale = bpy.props.FloatProperty(name="Normal scale",min=0,default=1,update=update_normal_scale)
     Material.msfs_alpha_cutoff = bpy.props.FloatProperty(name="Alpha cutoff",min=0,max=1,default=0.1,update=update_alpha_cutoff)
     Material.msfs_detail_uv_scale = bpy.props.FloatProperty(name="Detail UV scale",min=0,default=1,update=update_detail_uv_scale)
